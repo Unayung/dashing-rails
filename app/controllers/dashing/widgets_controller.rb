@@ -1,6 +1,6 @@
 module Dashing
   class WidgetsController < ApplicationController
-
+    skip_before_action :verify_authenticity_token
     before_action :check_accessibility, only: :update
     before_action :check_widget_name,   only: [:show, :update]
     before_action :prepend_view_paths,  only: :show
@@ -18,7 +18,7 @@ module Dashing
         redis_connection.publish("#{Dashing.config.redis_namespace}.create", hash.to_json)
       end
 
-      render nothing: true
+      head :ok
     end
 
     private
